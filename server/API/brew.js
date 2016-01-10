@@ -2,7 +2,7 @@
 "use strict";
 
 import * as errors from "../errors";
-import Immutable from "immutable";
+import {milkTypes, syrupTypes, alcoholTypes} from "../models/CoffeeOptionTypes";
 import CoffeeRecord from "../models/Coffee";
 
 module.exports = function (req: Object, res: Object, next: (err: ?error) => void) {
@@ -11,43 +11,47 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 	const syrupType = req.get("syrup-type");
 	const alcoholType = req.get("alcohol-type");
 
+	const log = [];
+	const response = {};
+
+	/**
+	 * Create new Coffee instance
+	 */
 	var coffee = new CoffeeRecord();
 
-	if(milkType) coffee = addMilk(coffee, milkType);
+	/**
+	 * Add syrup
+	 */
+	if(milkType) {
+		const milk = milkTypes.get(milkType);
 
-	var response = {};
+		log.push("Added milkType " + milkType);
 
-	response.addition = [];
+		if(milk) coffee = coffee.addMilk(milk);
+		else return next(errors.NotAcceptable.set("details", "Milk \"" + milk + "\" type not found"));
+	}
 
-	response.response = milkTypes.get("Cream") | milkTypes.get("Skim");
+	if(syrupType) {
+		const syrup = syrupTypes.get(syrupType);
+
+		log.push("Added syrupType " + syrupType);
+
+		if(syrup) coffee = coffee.addSyrup(syrup);
+		else return next(errors.NotAcceptable.set("details", "Syrup \"" + syrup + "\" type not found"));
+	}
+
+	if(alcoholType) {
+		const alcohol = alcoholTypes.get(alcoholType);
+
+		log.push("Added alcoholType " + alcoholType);
+
+		if(alcohol) coffee = coffee.addAlcohol(alcohol);
+		else return next(errors.NotAcceptable.set("details", "Syrup \"" + alcohol + "\" type not found"));
+	}
+
+	response.log = log;
 	response.coffee = coffee.toJS();
+	response.coffeev = coffee.getOptions("syrup");
 
 	res.json(response);
 }
-
-function addMilk(coffee, type) {
-	return coffee.set("milk", type);
-}
-
-const milkTypes = new Immutable.Map([
-	["Cream", 0x1],
-	["Half-and-half", 0x2],
-	["Whole-milk", 0x4],
-	["Part-Skim", 0x8],
-	["Skim", 0x16],
-	["Non-Dairy", 0x32]
-]);
-
-const syrupTypes = new Immutable.Map([
-	["Vanilla", 0x1],
-	["Almond", 0x2],
-	["Raspberry", 0x4],
-	["Chocolate", 0x8],
-]);
-
-const alcoholTypes = new Immutable.Map([
-	["Whisky", 0x1],
-	["Rum", 0x2],
-	["Kahlua", 0x4],
-	["Aquavit", 0x8],
-]);

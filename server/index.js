@@ -16,6 +16,8 @@ app.use(methodOverride());
 app.post("/", require("./API/brew"));
 
 app.use(function(err, req, res, next) {
+	Console.log(err);
+
 	res
 		.status(err.statusCode || 500)
 		.json(err);
