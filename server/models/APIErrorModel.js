@@ -7,6 +7,7 @@ export default class APIError extends Immutable.Record({
 	name: null,
 	statusCode: null,
 	message: null,
-	details: null
+	details: null,
+	acceptedValues: null,
 }) {
 }

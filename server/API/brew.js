@@ -28,7 +28,7 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 		log.push("Added milkType " + milkType);
 
 		if(milk) coffee = coffee.addMilk(milk);
-		else return next(errors.NotAcceptable.set("details", "Milk \"" + milk + "\" type not found"));
+		else return next(errors.MilkTypeNotFound.set("details", "Milk \"" + milk + "\" type not found"));
 	}
 
 	if(syrupType) {
@@ -37,7 +37,7 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 		log.push("Added syrupType " + syrupType);
 
 		if(syrup) coffee = coffee.addSyrup(syrup);
-		else return next(errors.NotAcceptable.set("details", "Syrup \"" + syrup + "\" type not found"));
+		else return next(errors.SyrupTypeNotFound.set("details", "Syrup \"" + syrup + "\" type not found"));
 	}
 
 	if(alcoholType) {
@@ -46,7 +46,7 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 		log.push("Added alcoholType " + alcoholType);
 
 		if(alcohol) coffee = coffee.addAlcohol(alcohol);
-		else return next(errors.NotAcceptable.set("details", "Syrup \"" + alcohol + "\" type not found"));
+		else return next(errors.AlcoholypeNotFound.set("details", "Syrup \"" + alcohol + "\" type not found"));
 	}
 
 	/**
