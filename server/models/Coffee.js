@@ -11,22 +11,12 @@ export default class Coffee extends Immutable.Record({
 	syrup: null,
 	alcohol: null
 }) {
-	addMilk(type) {
-		return this.set("milk", (this.get("milk")
-						? this.get("milk") | type
-						: type));
-	}
+	add(k, v) {
+		if(k.indexOf("-type") !== -1) k = k.replace("-type", "");
 
-	addSyrup(type) {
-		return this.set("syrup", (this.get("syrup")
-								? this.get("syrup") | type
-								: type));
-	}
-
-	addAlcohol(type) {
-		return this.set("alcohol", (this.get("alcohol")
-						? this.get("alcohol") | type
-						: type));
+		return this.set(k, (this.get(k)
+						? this.get(k) | v
+						: v));
 	}
 
 	format() {

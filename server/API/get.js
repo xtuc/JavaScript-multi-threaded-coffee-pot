@@ -4,10 +4,11 @@
 import * as errors from "../errors";
 
 module.exports = function (req: Object, res: Object, next: (err: ?error) => void) {
-	var coffees = [];
+	var response = [];
+	const coffees = req.cache.get("coffees");
 
-	if(req.cache.get("coffees"))
-		coffees = req.cache.get("coffees").map(coffee => { return coffee.format() });
+	if(coffees && coffees.length > 0)
+		response = req.cache.get("coffees").map(coffee => { return coffee.format() });
 
-	return res.json(coffees);
+	return res.json(response);
 }

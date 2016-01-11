@@ -6,3 +6,5 @@ type error = {
 	statusCode: Number;
 	details: string;
 };
+
+type Option = any | null;

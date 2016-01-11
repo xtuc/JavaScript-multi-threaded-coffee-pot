@@ -9,19 +9,26 @@ import Console from "better-console"
 import cache from "memory-cache"
 
 import CoffeeRecord from "./models/Coffee";
+import CoffeePotRecord from "./models/CoffeePot";
 
 const app = express();
 
+var coffeePot = new CoffeePotRecord();
+
 /**
- * Init cache
+ * Init cache & coffee pot
  */
 app.use(function(req, res, next) {
 	req.cache = cache;
+	req.coffeePot = coffeePot.set("concurrentCoffees", 1002);
+
 	next();
 });
 
 app.use(morgan('combined'));
-app.use(bodyParser());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(methodOverride());
 
 app.post("/", require("./API/brew"));
@@ -29,6 +36,9 @@ app.get("/", require("./API/get"));
 
 app.use(function(err, req, res, next) {
 	Console.log(err);
+
+	// Avoid null value in property acceptedvalues
+	if(!err.acceptedValues) delete err.acceptedValues;
 
 	res
 		.status(err.statusCode || 500)
