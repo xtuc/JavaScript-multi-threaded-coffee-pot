@@ -53,5 +53,10 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 	response.coffee = coffee.toJS();
 	response.coffeev = coffee.getOptions("syrup");
 
+	/**
+	 * Set coffee in cache
+	 */
+	req.cache = coffee;
+
 	res.json(response);
 }
