@@ -8,12 +8,14 @@ import methodOverride from "method-override"
 import Console from "better-console"
 import cache from "memory-cache"
 
+import CoffeeRecord from "./models/Coffee";
+
 const app = express();
 
 /**
  * Init cache
  */
-app.use(function(err, req, res, next) {
+app.use(function(req, res, next) {
 	req.cache = cache;
 	next();
 });

@@ -49,14 +49,21 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 		else return next(errors.NotAcceptable.set("details", "Syrup \"" + alcohol + "\" type not found"));
 	}
 
-	response.log = log;
-	response.coffee = coffee.toJS();
-	response.coffeev = coffee.getOptions("syrup");
+	/**
+	 * Start brewing coffee
+	 */
+	coffee = coffee
+				.set("brewing", true)
+				.set("startedAt", new Date());
+
+	const coffees = req.cache.get("coffees") || [];
+
+	coffees.push(coffee);
 
 	/**
 	 * Set coffee in cache
 	 */
-	req.cache = coffee;
+	req.cache.put("coffees", coffees);
 
 	res.json(response);
 }
