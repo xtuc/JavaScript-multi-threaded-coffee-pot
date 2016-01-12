@@ -7,6 +7,7 @@ import {milkTypes, syrupTypes, alcoholTypes} from "./CoffeeOptionTypes";
 export default class Coffee extends Immutable.Record({
 	brewing: false,
 	startedAt: false,
+	finishedAt: false,
 	milk: 0x00,
 	syrup: 0x00,
 	alcohol: 0x00

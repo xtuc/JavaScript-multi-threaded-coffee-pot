@@ -16,10 +16,11 @@ function createAdditionNotFoundException(addition: Object) {
 module.exports = function (req: Object, res: Object, next: (err: ?error) => void) {
 	const response = {};
 	const additionType: String = req.get("addition-type");
-	const coffees: Array = req.cache.get("coffees") || [];
+	const coffeePot = req.cache.get("coffeePot");
+	const coffees: Array = coffeePot.get("coffees") || [];
 
-	if(coffees.length >= req.coffeePot.get("concurrentCoffees"))
-		return next(errors.Potbusy.set("details", coffees.length + " are currently brewing"));
+	if(coffees.count() >= coffeePot.get("concurrentCoffees"))
+		return next(errors.Potbusy.set("details", coffees.count() + " are currently brewing"));
 
 	var additions = [
 		{ name: "sweetener-type", value: req.get("sweetener-type"), data: Immutable.Map() },
@@ -50,24 +51,13 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 
 	if(coffee) {
 
-		/**
-		 * Start brewing coffee
-		 */
-		coffee = coffee
-					.set("brewing", true)
-					.set("startedAt", new Date());
-
 		coffees.push(coffee);
-
-		/**
-		 * Set coffee in cache
-		 */
-		req.cache.put("coffees", coffees);
 
 		/**
 		 * Start coffee worker
 		 */
-		
+		const newcoffeePot = coffeePot.set("coffees", coffees);
+		req.cache.put("coffeePot", newcoffeePot);
 
 		res.json(coffee.format());
 	}
