@@ -7,15 +7,15 @@ import {milkTypes, syrupTypes, alcoholTypes} from "./CoffeeOptionTypes";
 export default class Coffee extends Immutable.Record({
 	brewing: false,
 	startedAt: false,
-	milk: null,
-	syrup: null,
-	alcohol: null
+	milk: 0x00,
+	syrup: 0x00,
+	alcohol: 0x00
 }) {
 	add(k, v) {
 		if(k.indexOf("-type") !== -1) k = k.replace("-type", "");
 
 		return this.set(k, (this.get(k)
-						? this.get(k) | v
+						? this.get(k) + v
 						: v));
 	}
 
@@ -40,18 +40,20 @@ export default class Coffee extends Immutable.Record({
 		const array = [];
 
 		// No value
-		if(this.get(type) === null) return array;
+		if(this.get(type) === 0x00) return array;
 
 		var source;
 
-		if(type === "milk") source = milkTypes.toJS()
-		else if(type === "syrup") source = syrupTypes.toJS()
-		else if(type === "alcohol") source = alcoholTypes.toJS()
+		if(type === "milk") source = milkTypes
+		else if(type === "syrup") source = syrupTypes
+		else if(type === "alcohol") source = alcoholTypes
+		else return array;
+
+		source = source.toJS();
 
 		for(var i in source) {
-			if(source[i] & this.get(type)) {
-				array.push(i);
-			}
+			var result = source[i] & this.get(type);
+			if(result !== 0 && result === this.get(type)) array.push(i);
 		}
 
 		return array;	

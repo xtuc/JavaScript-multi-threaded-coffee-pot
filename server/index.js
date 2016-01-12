@@ -13,6 +13,10 @@ import CoffeePotRecord from "./models/CoffeePot";
 
 const app = express();
 
+const numCPUs = require('os').cpus().length;
+
+Console.debug("CoffePot set to", numCPUs, "concurrent coffees");
+
 var coffeePot = new CoffeePotRecord();
 
 /**
@@ -20,7 +24,8 @@ var coffeePot = new CoffeePotRecord();
  */
 app.use(function(req, res, next) {
 	req.cache = cache;
-	req.coffeePot = coffeePot.set("concurrentCoffees", 1002);
+	req.coffeePot = coffeePot
+						.set("concurrentCoffees", numCPUs);
 
 	next();
 });

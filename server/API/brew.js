@@ -10,7 +10,7 @@ import Immutable from "immutable";
 function createAdditionNotFoundException(addition: Object) {
 	return errors.TypeNotFound
 		.set("details", addition.name + " \"" + addition.value + "\" type not found")
-		.set("acceptedValues", addition.data.keySeq())
+		.set("acceptedValues", addition.data.keySeq());
 }
 
 module.exports = function (req: Object, res: Object, next: (err: ?error) => void) {
@@ -50,8 +50,6 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 
 	if(coffee) {
 
-		console.log(coffee);
-
 		/**
 		 * Start brewing coffee
 		 */
@@ -65,6 +63,11 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 		 * Set coffee in cache
 		 */
 		req.cache.put("coffees", coffees);
+
+		/**
+		 * Start coffee worker
+		 */
+		
 
 		res.json(coffee.format());
 	}
