@@ -2,8 +2,8 @@
 "use strict";
 
 import Immutable from "immutable";
-import APIError from "./models/APIErrorModel"
-import {milkTypes, syrupTypes, alcoholTypes} from "./models/CoffeeOptionTypes"
+import APIError from "./API/APIErrorRecord"
+import {milkTypes, syrupTypes, alcoholTypes} from "./Coffee/CoffeeOptionTypes"
 
 export const ImATeapot: error = new APIError({ statusCode: 418, message: "I'm a teapot", name: "ImATeapot" });
 export const Potbusy: error = new APIError({ statusCode: 510, message: "Pot busy", name: "Potbusy" });

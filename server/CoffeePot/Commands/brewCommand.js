@@ -1,11 +1,14 @@
 /* @flow */
 "use strict";
 
-import * as errors from "../errors";
-import {milkTypes, syrupTypes, alcoholTypes} from "../models/CoffeeOptionTypes";
-import CoffeeRecord from "../models/Coffee";
+import * as errors from "../../errors";
+import {milkTypes, syrupTypes, alcoholTypes} from "../../Coffee/CoffeeOptionTypes";
+import CoffeeRecord from "../../Coffee/CoffeeRecord";
 import _ from "lodash";
 import Immutable from "immutable";
+
+import cache from "../../cache"
+import CoffeeThread from "../CoffeeThread"
 
 function createAdditionNotFoundException(addition: Object) {
 	return errors.TypeNotFound
@@ -16,7 +19,7 @@ function createAdditionNotFoundException(addition: Object) {
 module.exports = function (req: Object, res: Object, next: (err: ?error) => void) {
 	const response = {};
 	const additionType: String = req.get("addition-type");
-	const coffeePot = req.cache.get("coffeePot");
+	const coffeePot = cache.get("coffeePot");
 	const coffees: Array = coffeePot.get("coffees") || [];
 
 	if(coffees.count() >= coffeePot.get("concurrentCoffees"))
@@ -50,15 +53,20 @@ module.exports = function (req: Object, res: Object, next: (err: ?error) => void
 	});
 
 	if(coffee) {
-
 		coffees.push(coffee);
 
 		/**
 		 * Start coffee worker
 		 */
 		const newcoffeePot = coffeePot.set("coffees", coffees);
-		req.cache.put("coffeePot", newcoffeePot);
+		cache.put("coffeePot", newcoffeePot);
 
-		res.json(coffee.format());
+		if(CoffeeThread.run(coffee)) {
+			return res.json(coffee.format());
+		} else {
+			return next(errors.Potbusy.set("details", coffees.count() + " are currently brewing"));
+		}
+
+		
 	}
 }
