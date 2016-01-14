@@ -31,7 +31,7 @@ app.post("/", require("./CoffeePot/Commands/brewCommand"));
 app.get("/", require("./CoffeePot/Commands/getCommand"));
 
 app.use(function(err, req, res, next) {
-	Console.log(err);
+	Console.error(err);
 
 	// Avoid null value in property acceptedvalues
 	if(!err.acceptedValues) delete err.acceptedValues;

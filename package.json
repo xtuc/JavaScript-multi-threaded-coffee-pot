@@ -23,6 +23,7 @@
     "memory-cache": "^0.1.4",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
+    "request": "^2.67.0",
     "sleep": "^3.0.0",
     "webworker-threads": "^0.6.2"
   }
