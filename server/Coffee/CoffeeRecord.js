@@ -12,7 +12,7 @@ export default class CoffeeRecord extends Immutable.Record({
 	syrup: 0x00,
 	alcohol: 0x00
 }) {
-	add(k, v) {
+	add(k: string, v: string): Object {
 		if(k.indexOf("-type") !== -1) k = k.replace("-type", "");
 
 		return this.set(k, (this.get(k)
@@ -20,7 +20,7 @@ export default class CoffeeRecord extends Immutable.Record({
 						: v));
 	}
 
-	format() {
+	format(): Object {
 		return {
 			brewing: this.get("brewing"),
 			startedAt: this.get("startedAt"),
@@ -28,7 +28,7 @@ export default class CoffeeRecord extends Immutable.Record({
 		}
 	}
 
-	getAdditions() {
+	getAdditions(): Object {
 
 		return {
 			milk: this.getOptions("milk"),
@@ -37,7 +37,7 @@ export default class CoffeeRecord extends Immutable.Record({
 		}	
 	}
 
-	getOptions(type) {
+	getOptions(type: string): Array<string> {
 		const array = [];
 
 		// No value
