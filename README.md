@@ -25,6 +25,7 @@ Multi-threading is provided by a node module: [webworker-threads](https://www.np
 
 
 ### Links:
-
+ 
+ * [Inspired from this project (C implementation)](https://github.com/madmaze/HTCPCP) 
  * [Official RFC](https://tools.ietf.org/html/rfc2324)
  * [Wiki](https://fr.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol)
