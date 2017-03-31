@@ -1,5 +1,7 @@
 # JavaScript multi-threaded coffee-pot
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/xtuc/JavaScript-multi-threaded-coffee-pot.svg)](https://greenkeeper.io/)
+
 This projet is still in developpement and is not spec compliant.
 
 As said in the wiki, HTCPCP is an extension of HTTP. This means that we cannot use Express as web server. Not even http package. The project needs to be re-written with net module from node standart library.
